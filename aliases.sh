@@ -6,6 +6,7 @@
 alias dirsize='du -sh'
 alias diskspace='df -h'
 alias rot13='tr A-MN-Za-mn-z N-ZA-Mn-za-m'
+alias screenopen='screen -d -R'
 alias sortc='sort | uniq -c | sort -nr'
 [[ $OSTYPE == "darwin"* ]] && alias opentw='open -a TextWrangler'
 
