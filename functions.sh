@@ -42,6 +42,22 @@ quiet_success() {
   fi
 }
 
+# Opens a screen session with the given name, either creating a new session or
+# attaching to one that already exists. Also enables logging for the session.
+command -v screen > /dev/null && screenopen() {
+  local logfile="/tmp/screen.${1:?Must specify a screen session name.}.log"
+  # http://serverfault.com/a/248387
+  local screenrc
+  screenrc=$(mktemp)
+  cat <<EOF >$screenrc
+logfile $logfile
+source $HOME/.screenrc
+EOF
+  screen -d -R "$1" -L -c "$screenrc"
+  rm "$screenrc"
+  echo "Logfile at $logfile"
+}
+
 # Grep ps command
 # Inspiration: http://www.commandlinefu.com/commands/view/977/
 # Alternately: http://code.google.com/p/psgrep/
@@ -91,7 +107,7 @@ emailme() {
 
 # Extracts archives of different types
 # http://www.shell-fu.org/lister.php?id=375
-extract () {
+extract() {
   if [[ -f "$1" ]] ; then
     case "$1" in
       *.tar.bz2)   tar xvjf "$1"    ;;
