@@ -7,9 +7,10 @@
 #
 
 if command -v screen > /dev/null; then
-  screens=$(screen -ls | grep '^'$'\t' | awk '{ print $1 }' | sed 's/[0-9]*\.//' | sort)
+  screens=$(screens)
   if [[ -n "$screens" ]]; then
     echo "Open screen sessions: $(echo "$screens" | wc -w)"
     echo " " $screens # intentionally unquoted to put everything on one line
   fi
+  unset screens
 fi

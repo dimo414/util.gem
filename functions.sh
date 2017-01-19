@@ -42,6 +42,15 @@ quiet_success() {
   fi
 }
 
+# Prints the currently open screen sesions
+command -v screen > /dev/null && screens() {
+  screen -ls |
+    grep '^'$'\t' |
+    awk '{ print $1 }' |
+    sed 's/[0-9]*\.//' |
+    sort
+}
+
 # Opens a screen session with the given name, either creating a new session or
 # attaching to one that already exists. Also enables logging for the session.
 command -v screen > /dev/null && screenopen() {
