@@ -191,7 +191,10 @@ gitsyncfork() {
 # after the editor exits.
 # Re-running in the same shell session opens the same file.
 java_demo() {
-  vi /tmp/Demo$$.java &&
-  echo "javac /tmp/Demo$$.java" >&2 && javac /tmp/Demo$$.java &&
-  echo "java -cp /tmp Demo$$" >&2   && java -cp /tmp Demo$$
+  local dir="${TMP:-/tmp}"
+  (cd "$dir" &&
+   vi Demo$$.java &&
+   echo "javac $dir/Demo$$.java" >&2 && javac "Demo$$.java" &&
+   echo "java -cp $dir Demo$$" >&2   && java -cp . "Demo$$"
+  )
 }
