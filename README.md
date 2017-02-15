@@ -1,5 +1,8 @@
 # util.gem - General Bash Utilities
 
+*See the [ProfileGem](https://bitbucket.org/dimo414/profilegem) project for
+installation instructions.*
+
 This gem contains several functions and aliases considered (by the author) to
 be generally useful. By design the functionality in this gem are **entirely
 additive**, meaning nothing in your current environment should be changed by
