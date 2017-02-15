@@ -6,9 +6,7 @@
 alias dirsize='du -sh'
 alias diskspace='df -h'
 alias rot13='tr A-MN-Za-mn-z N-ZA-Mn-za-m'
-unalias screenopen 2>/dev/null # TODO delete by Feb 1 2017
 alias sortc='sort | uniq -c | sort -nr'
-[[ $OSTYPE == "darwin"* ]] && alias opentw='open -a TextWrangler'
 
 # Adds a 'clipboard' command to pipe into, that writes to the system clipboard
 #   command_whos_output_i_want_to_paste | clipboard

@@ -8,3 +8,7 @@
 # like here, instead define values which environment.sh will then use
 # after the user's config file has been loaded.
 #
+
+# Your email address - used by emailme
+# defaults to your username, which will deliver to local mail
+EMAIL=$USER
