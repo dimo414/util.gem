@@ -12,7 +12,12 @@
 # Takes two (generally sibling) commands to execute based on whether or not
 # stdin is being written to. $1 is executed if input is being piped in,
 # $2 is executed otherwise.
-# TODO just inline this, replacing aliases with functions?
+#
+# Generally speaking it's simpler and cleaner to just write a function that
+# checks [[ -t 0 ]] (like this function), however this function enables
+# defining concise aliases that react to stdin being piped. See the
+# clipboard examples in aliases.sh - those three lines would take up almost
+# 20 if defined in their own (near-identical) functions.
 if_stdin() {
   has_stdin="${1:?Must specify a command for stdin}"
   shift
