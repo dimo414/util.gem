@@ -197,9 +197,23 @@ gitsyncfork() {
 # Re-running in the same shell session opens the same file.
 java_demo() {
   local dir="${TMP:-/tmp}"
+  local class="Demo$$"
+  local path="$dir/$class.java"
+  if ! [[ -f "$path" ]] ; then
+    cat << EOF > $path
+import java.util.*;
+
+public class $class {
+  public static void main(String[] args) {
+    
+  }
+}
+EOF
+  fi
+  # cd to /tmp to support Cygwin - Java doesn't like absolute Cygwin paths
   (cd "$dir" &&
-   vi Demo$$.java &&
-   echo "javac $dir/Demo$$.java" >&2 && javac "Demo$$.java" &&
-   echo "java -cp $dir Demo$$" >&2   && java -cp . "Demo$$"
+   vi $class.java &&
+   echo "javac $path" >&2 && javac "$class.java" &&
+   echo "java -cp $dir $class" >&2   && java -cp . "$class"
   )
 }
