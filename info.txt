@@ -1,0 +1,16 @@
+Generally useful terminal utilities
+
+# Key Features
+
+clipboard          pipe into this command to set the system clipboard; outputs
+                   the current clipboard contents if stdin isn't being piped.
+extract            extracts the given archive to a directory. Supports .zip,
+                   .jar, .rar, .tar, .gz, and more.
+gitsyncfork        syncs a Git repository with its upstream master.
+screenopen [NAME]  opens a screen session with useful defaults; detaches any
+                   existing connection and logs the session to /tmp.
+wait_ext           blocks until the PIDs passed as arguments are finished.
+wait_port          blocks until the ports passed as arguments are listening for
+                   requests.
+
+See aliases.sh and functions.sh for full list.
