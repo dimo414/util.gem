@@ -174,6 +174,13 @@ wait_port() {
   done
 }
 
+# Launches a Bash shell without any .rc customizations
+# Useful for testing behavior that might be impacted by your environment.
+# https://stackoverflow.com/a/41554230/113632
+pristine_bash() {
+  env -i bash --noprofile --norc
+}
+
 #
 # Git Functions
 #
@@ -185,6 +192,14 @@ gitsyncfork() {
   git checkout master &&
   git merge upstream/master &&
   echo "Ready to push with 'git push'"
+}
+
+# Rebase all commits not found in the upstream master (i.e. in a PR)
+# generally in order to squash them all into one commit.
+# https://stackoverflow.com/a/15055649/113632
+gitsquash() {
+  git rebase -i upstream/master
+  echo "Push rebased changes with 'git push -f'"
 }
 
 #
