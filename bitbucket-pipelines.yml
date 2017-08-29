@@ -4,4 +4,5 @@ pipelines:
   default:
     - step:
         script:
+          - bats test
           - /pgem_test/gem_test.sh .

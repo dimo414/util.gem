@@ -24,10 +24,15 @@ if_stdin() {
   no_stdin="${1:?Must specify a command for no stdin}"
   shift
   # Need to use eval to support things like > redirection
+  # Which in turn means we need to escape any remaining args
+  local args
+  if (( $# )); then
+    args=$(printf '%q ' "$@")
+  fi
   if ! [[ -t 0 ]]; then
-    eval $has_stdin "$@"
+    eval "$has_stdin $args"
   else
-    eval $no_stdin "$@"
+    eval "$no_stdin $args"
   fi
 }
 
@@ -115,8 +120,10 @@ emailme() {
   shift
   time $cmd "$@"
 
-  echo -e "From: $EMAIL\nTo: $EMAIL\nSubject: Finished running $cmd \n\nRan: $cmd $*\n\nStatus: $?" | sendmail -t
-  $_PGEM_DEBUG && echo "Emailed $EMAIL"
+  printf "From: %s\nTo: %s\nSubject: Finished running %s\n\nRan: %s\n\nStatus: %s\n" \
+    "$EMAIL" "$EMAIL" "$cmd" "${cmd} $*" "$?" \
+    | sendmail -t
+  pgem_log "Emailed $EMAIL"
 }
 
 # Extracts archives of different types
