@@ -14,14 +14,20 @@
 # $2 is executed otherwise.
 #
 # Generally speaking it's simpler and cleaner to just write a function that
-# checks [[ -t 0 ]] (like this function), however this function enables
-# defining concise aliases that react to stdin being piped. See the
-# clipboard examples in aliases.sh - those three lines would take up almost
-# 20 if defined in their own (near-identical) functions.
+# checks [[ -t 0 ]] or [[ -p /dev/stdin ]] (like this function), however this
+# function enables defining concise aliases that react to stdin being piped.
+# See the clipboard examples in aliases.sh - those three lines would take up
+# almost 20 if defined in their own (near-identical) functions.
+#
+# Note: be careful if calling this function from scripts or other functions,
+# as non-TTY environments may *look* like there's a stdin when there isn't.
+# Using this function only in aliases avoids the issue since aliases are
+# (by default) not defined in non-interactive environments.
+# See https://stackoverflow.com/a/30520299/113632
 if_stdin() {
-  has_stdin="${1:?Must specify a command for stdin}"
+  local has_stdin="${1:?Must specify a command for stdin}"
   shift
-  no_stdin="${1:?Must specify a command for no stdin}"
+  local no_stdin="${1:?Must specify a command for no stdin}"
   shift
   # Need to use eval to support things like > redirection
   # Which in turn means we need to escape any remaining args
@@ -29,7 +35,7 @@ if_stdin() {
   if (( $# )); then
     args=$(printf '%q ' "$@")
   fi
-  if ! [[ -t 0 ]]; then
+  if [[ -p /dev/stdin ]]; then
     eval "$has_stdin $args"
   else
     eval "$no_stdin $args"
@@ -83,13 +89,14 @@ EOF
 # TODO how is this better than pgrep?
 # https://github.com/koalaman/shellcheck/wiki/SC2009
 psgrep() {
+  local psargs grepargs
   if [[ -z "$2" ]]
   then
-    local psargs="aux"
-    local greparg="$1"
+    psargs="aux"
+    greparg="$1"
   else
-    local psargs="$1"
-    local greparg="$2"
+    psargs="$1"
+    greparg="$2"
   fi
   # shellcheck disable=SC2001
   greparg=$(echo "$greparg" | sed 's|\(.\)$|[\1]|')
