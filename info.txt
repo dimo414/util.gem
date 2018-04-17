@@ -7,6 +7,10 @@ clipboard        pipe into this command to set the system clipboard; outputs
 extract          extracts the given archive to a directory. Supports .zip,
                  .jar, .rar, .tar, .gz, and more.
 gitsyncfork      syncs a Git repository with its upstream master.
+goto             jump to common directories using fzf, configured via
+                 GOTO_PATHS and GOTO_DIRS arrays.
+open             common alias for different systems' open-with-default-app
+                 command; e.g. `open foo.png`.
 screenopen NAME  opens a screen session with useful defaults; detaches any
                  existing connection and logs the session to /tmp.
 wait_ext         blocks until the PIDs passed as arguments are finished.
