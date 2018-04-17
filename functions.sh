@@ -58,6 +58,22 @@ quiet_success() {
   fi
 }
 
+# Uses https://github.com/junegunn/fzf "fuzzy find" to support easily cd-ing
+# to commonly used directories. Add paths to GOTO_PATHS or GOTO_DIRS to
+# include them in the search.
+# Arguments to this function seed the fuzzy find; if the arguments match
+# exactly one path skips the find UI and jumps straight to the directory.
+goto() {
+  local path
+  path=$(
+    { (( ${#GOTO_PATHS[@]} > 0 )) && find "${GOTO_PATHS[@]}" \
+        -mindepth 1 -maxdepth 1 -not -path '*/\.*' -type d -print0
+      (( ${#GOTO_DIRS[@]} > 0 )) && printf '%s\0' "${GOTO_DIRS[@]}"
+    } | fzf --tiebreak=end --select-1 --exit-0 --read0 --query="$*"
+  ) || return
+  cd "$path"
+}
+
 # Prints the currently open screen sesions
 command -v screen > /dev/null && screens() {
   screen -ls |
@@ -167,7 +183,7 @@ extract() {
 wait_ext() {
   # Warn if the first PID is not found before we start waiting, since that
   # could mean the provided PID is incorrect
-  [[ -e "/proc/$1" ]] || echo "Warning, no PID $1 found."
+  [[ -e "/proc/$1" ]] || echo "Warning, no PID $1 found." >&2
   while (( "$#" )); do
     while [[ -e "/proc/$1" ]]; do sleep 1; done
     shift

@@ -6,7 +6,7 @@
 # Not included in non-interactive terminals, like cron
 #
 
-if command -v screen > /dev/null; then
+if command -v screens > /dev/null; then
   screens=$(screens)
   if [[ -n "$screens" ]]; then
     echo "Open screen sessions: $(echo "$screens" | wc -w)"

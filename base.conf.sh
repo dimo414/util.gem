@@ -12,3 +12,8 @@
 # Your email address - used by emailme
 # defaults to your username, which will deliver to local mail
 EMAIL=$USER
+
+# Directories whose child directories will be reachable by goto
+GOTO_PATHS=()
+# Directories that are directly reachable by goto
+GOTO_DIRS=()
