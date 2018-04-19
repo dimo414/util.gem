@@ -64,12 +64,24 @@ quiet_success() {
 # Arguments to this function seed the fuzzy find; if the arguments match
 # exactly one path skips the find UI and jumps straight to the directory.
 goto() {
+  local fzf_flags=()
+  # if an argument is passed and does not contain a / search only against the
+  # final directory.
+  # Maybe this should be the default behavior, even with no arguments?
+  # That would require users to say `goto /` in order to search the full path
+  # which would be somewhat surprising.
+  if (( $# > 0 )) && [[ "$*" != *'/'* ]]; then
+    fzf_flags=('--delimiter=/' '--nth=-1')
+  fi
+
   local path
   path=$(
     { (( ${#GOTO_PATHS[@]} > 0 )) && find "${GOTO_PATHS[@]}" \
         -mindepth 1 -maxdepth 1 -not -path '*/\.*' -type d -print0
       (( ${#GOTO_DIRS[@]} > 0 )) && printf '%s\0' "${GOTO_DIRS[@]}"
-    } | fzf --tiebreak=end --select-1 --exit-0 --read0 --query="$*"
+    } | sort -z \
+      | fzf --tiebreak=end --select-1 --exit-0 --read0 "${fzf_flags[@]}" \
+        --query="$*"
   ) || return
   cd "$path"
 }
