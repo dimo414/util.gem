@@ -14,7 +14,7 @@ alias sortc='sort | uniq -c | sort -nr'
 command -v pbcopy &> /dev/null && alias clipboard="if_stdin 'pbcopy' 'pbpaste'"                          # OSX
 command -v xclip &> /dev/null && alias clipboard="if_stdin 'xclip -sel clip' 'xclip -o -sel clip'"       # Ubuntu
 # WSL must come before Cygwin, since Cygwin also has clip.exe on the path
-command -v clip.exe &> /dev/null && alias clipboard="if_stdin 'clip.exe' 'pgem_err paste not supported'" # WSL
+command -v clip.exe &> /dev/null && alias clipboard="if_stdin 'clip.exe' 'pg::err paste not supported'" # WSL
 # See also http://williammitchell.blogspot.com/2008/03/fun-with-cygwins-devclipboard.html
 [[ -e /dev/clipboard ]] && alias clipboard="if_stdin 'cat > /dev/clipboard' 'cat /dev/clipboard'"        # Cygwin
 

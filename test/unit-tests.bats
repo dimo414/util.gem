@@ -9,7 +9,7 @@
 
 source $BATS_TEST_DIRNAME/../functions.sh
 
-pgem_log() { echo "PGEM_LOG" "$@"; }
+pg::log() { echo "PGEM_LOG" "$@"; }
 
 expect_eq() {
   (( $# == 2 )) || { echo "Invalid inputs $*"; return 127; }

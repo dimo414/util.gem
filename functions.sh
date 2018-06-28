@@ -158,7 +158,7 @@ emailme() {
   printf "From: %s\nTo: %s\nSubject: Finished running %s\n\nRan: %s\n\nStatus: %s\n" \
     "$EMAIL" "$EMAIL" "$cmd" "${cmd} $*" "$?" \
     | sendmail -t
-  pgem_log "Emailed $EMAIL"
+  pg::log "Emailed $EMAIL"
 }
 
 # Extracts archives of different types
