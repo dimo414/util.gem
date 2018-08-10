@@ -219,8 +219,11 @@ wait_port() {
 # Launches a Bash shell without any .rc customizations
 # Useful for testing behavior that might be impacted by your environment.
 # https://stackoverflow.com/a/41554230/113632
+#
+# This function will pass additional arguments to Bash, e.g. `-c 'foo'` will
+# invoke foo in a pristine shell non-interactively.
 pristine_bash() {
-  env -i bash --noprofile --norc
+  env -i bash --noprofile --norc "$@"
 }
 
 #
