@@ -97,16 +97,37 @@ command -v screen > /dev/null && screens() {
 
 # Opens a screen session with the given name, either creating a new session or
 # attaching to one that already exists. Also enables logging for the session.
+#
+# If additional arguments are passed they will be invoked as the new screen is
+# starting. Once complete a standard shell will be available.
 command -v screen > /dev/null && screenopen() {
-  local logfile="/tmp/screen.${1:?Must specify a screen session name.}.log"
+  local screenname=${1:?Must specify a screen session name.}
+  local logfile="/tmp/screen.${screenname}.log"
+  shift
+
   # http://serverfault.com/a/248387
   local screenrc
-  screenrc=$(mktemp)
+  screenrc=$(mktemp) || return
   cat <<EOF >$screenrc
 logfile $logfile
 source $HOME/.screenrc
 EOF
-  screen -d -R "$1" -L -c "$screenrc"
+
+  screencmd=(screen -d -R "$screenname" -L -c "$screenrc")
+  if (( $# )); then
+    # The approach here is to invoke Bash in the screen session, with a custom
+    # init-file that sources .bashrc and then invokes the command. This lets us
+    # invoke Bash functions and runs in a predictable environment.
+    # https://serverfault.com/a/694275
+    local screenshell=$(mktemp) || return
+    printf 'source "%s"\necho "Running:\t%s"\n%s\n' "$HOME/.bashrc" "$*" "$*" > "$screenshell"
+    "${screencmd[@]}" \
+      bash --init-file "$screenshell"
+    rm "$screenshell"
+  else
+    "${screencmd[@]}"
+  fi
+
   rm "$screenrc"
   echo "Logfile at $logfile"
 }
