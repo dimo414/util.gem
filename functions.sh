@@ -86,8 +86,9 @@ goto() {
   cd "$path"
 }
 
+if command -v screen > /dev/null; then
 # Prints the currently open screen sesions
-command -v screen > /dev/null && screens() {
+screens() {
   screen -ls |
     grep '^'$'\t' |
     awk '{ print $1 }' |
@@ -95,16 +96,11 @@ command -v screen > /dev/null && screens() {
     sort
 }
 
-# Opens a screen session with the given name, either creating a new session or
-# attaching to one that already exists. Also enables logging for the session.
-#
-# If additional arguments are passed they will be invoked as the new screen is
-# starting. Once complete a standard shell will be available.
-command -v screen > /dev/null && screenopen() {
-  local screenname=${1:?Must specify a screen session name.}
-  local logfile="/tmp/screen.${screenname}.log"
+# Configures screen with logging enabled and written to a dedicated file
+_screen_logging() {
+  local session="${1:?Must specify a screen session name.}"
+  local logfile="/tmp/screen.${session}.log"
   shift
-
   # http://serverfault.com/a/248387
   local screenrc
   screenrc=$(mktemp) || return
@@ -112,25 +108,37 @@ command -v screen > /dev/null && screenopen() {
 logfile $logfile
 source $HOME/.screenrc
 EOF
-
-  screencmd=(screen -d -R "$screenname" -L -c "$screenrc")
-  if (( $# )); then
-    # The approach here is to invoke Bash in the screen session, with a custom
-    # init-file that sources .bashrc and then invokes the command. This lets us
-    # invoke Bash functions and runs in a predictable environment.
-    # https://serverfault.com/a/694275
-    local screenshell=$(mktemp) || return
-    printf 'source "%s"\necho "Running:\t%s"\n%s\n' "$HOME/.bashrc" "$*" "$*" > "$screenshell"
-    "${screencmd[@]}" \
-      bash --init-file "$screenshell"
-    rm "$screenshell"
-  else
-    "${screencmd[@]}"
-  fi
-
+  screen -S "$session" -L -c "$screenrc" "$@"
   rm "$screenrc"
   echo "Logfile at $logfile"
 }
+
+# Opens a screen session with the given name, either creating a new session or
+# attaching to one that already exists. Also enables logging for the session.
+screenopen() {
+  local session="${1:?Must specify a screen session name.}"
+  _screen_logging "$session" -d -R
+}
+
+# Creates a screen session (if it doesn't already exist), and then writes all
+# arguments to the screen's command buffer. To execute the commands, append
+# with `\n`. To execute and exit upon success append with `&& exit\n`.
+screencmd() {
+  local session="${1:?Must specify a screen session name.}"
+  shift
+  if (( $# == 0 )); then
+    pg::err "Must provide a command to run"
+    return 1
+  fi
+  # https://stackoverflow.com/a/28724362
+  screen -S "$session" -X select . &>/dev/null || \
+    _screen_logging "$session" -d -m
+  sleep 1 # let screen startup, not sure if this is necessary
+  screen -S "$session" -X stuff "$*"
+  printf "Wrote '%s' to '%s'\nTo open run:\n  screenopen '%s'\nthen <Ctrl>+a d to detatch.\n" \
+    "$*" "$session" "$session"
+}
+fi # if screen is installed
 
 # Grep ps command
 # Inspiration: http://www.commandlinefu.com/commands/view/977/
