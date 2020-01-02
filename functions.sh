@@ -102,14 +102,8 @@ _screen_logging() {
   local logfile="/tmp/screen.${session}.log"
   shift
   # http://serverfault.com/a/248387
-  local screenrc
-  screenrc=$(mktemp) || return
-  cat <<EOF >$screenrc
-logfile $logfile
-source $HOME/.screenrc
-EOF
-  screen -S "$session" -L -c "$screenrc" "$@"
-  rm "$screenrc"
+  # https://stackoverflow.com/a/50651839
+  screen -S "$session" -L -Logfile "$logfile" "$@"
   echo "Logfile at $logfile"
 }
 
