@@ -64,6 +64,8 @@ list of functionality provided.*
 *   `gitsyncfork` syncs a Git repository with its upstream master. Useful for
     pulling in updates to a forked GitHub repo.
 
+*   `backoff` basic implementation of exponential backoff for shell commands.
+
 *   `wait_ext` blocks until the PIDs passed as arguments are finished.
     Useful for waiting for commands running in other terminals.
 

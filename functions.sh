@@ -211,6 +211,39 @@ extract() {
   fi
 }
 
+# Basic implementation of exponential backoff; invokes the given command
+# until it succeeds. All stderr is preserved, but stdout from failed invocations
+# is discarded
+backoff() {
+  if (( $# < 3 )); then
+    pg::err "Usage: backoff MIN_DELAY_SEC MAX_DELAY_SEC CMD [ARGS...]"
+    return 2
+  fi
+
+  local min=$1
+  local max=$2
+  if (( min < 1 )) 2>/dev/null || (( max <= min)) 2>/dev/null; then
+    pg::err "Invalid backoff range, MIN must be positive and MAX > MIN"
+    return 1
+  fi
+  shift; shift
+
+  local output delay="$min"
+  output=$(mktemp --suffix=.txt) || return
+  trap "rm -f '$output'" RETURN
+  while true; do
+    if "$@" > "$output"; then
+      cat "$output"
+      return
+    fi
+    sleep "${delay}s"
+    # increase delay by 1-10x
+    delay=$(( delay * (RANDOM % 10 + 1) ))
+    # cap delay at max, including overflows
+    delay=$(( delay > max || delay <= 0 ? max : delay ))
+  done
+}
+
 # Waits for processes that aren't a child process of this shell
 # Pair with:
 #   long_running_command & wait # this prints the PID of long_running_command
