@@ -89,11 +89,7 @@ goto() {
 if command -v screen > /dev/null; then
 # Prints the currently open screen sesions
 screens() {
-  screen -ls |
-    grep '^'$'\t' |
-    awk '{ print $1 }' |
-    sed 's/[0-9]*\.//' |
-    sort
+  screen -ls | sed -n 's/^\t[0-9]*\.\([^\t]*\).*/\1/p' | sort
 }
 
 # Configures screen with logging enabled and written to a dedicated file
