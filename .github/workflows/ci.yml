@@ -13,8 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Unit Tests
       run: bats test
-    # TODO fix gem_test.sh to support Git repos
-    #- name: Gem Tests
-    #  run: /pgem_test/gem_test.sh .
+    - name: Gem Tests
+      run: /pgem_test/gem_test.sh .
 
 # TODO shellcheck job
