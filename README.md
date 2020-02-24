@@ -1,6 +1,6 @@
 # util.gem - General Bash Utilities
 
-*See the [ProfileGem](https://bitbucket.org/dimo414/profilegem) project for
+*See the [ProfileGem](https://github.com/dimo414/ProfileGem) project for
 installation instructions.*
 
 This gem contains several functions and aliases considered (by the author) to
