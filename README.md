@@ -55,6 +55,9 @@ list of functionality provided.*
     Relies on `sendmail` being configured correctly, and reads the `EMAIL`
     environment variable to determine where to send to.
 
+*   `highlight` highlights matched keywords in input passed to stdin, e.g.
+    `noisy_command | highlight ERROR`
+
 *   `screens` prints a list of currently open `screen` sessions, and
     `screenopen` opens an existing screen session (or creates a new one) in a
     user-friendly way. Power-users will prefer sticking with `screen` or their
