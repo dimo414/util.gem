@@ -313,7 +313,12 @@ gitsyncfork() {
 # generally in order to squash them all into one commit.
 # https://stackoverflow.com/a/15055649/113632
 gitsquash() {
-  git rebase -i upstream/master &&
+  if ! git config remote.upstream.url > /dev/null; then
+    pg::err "'upstream' remote not set; use 'git remote add upstream REPO_LOCATION'"
+    return 1
+  fi
+  git fetch upstream &&
+    git rebase -i upstream/master &&
     echo "Push rebased changes with 'git push -f'"
 }
 
