@@ -10,7 +10,7 @@ if command -v screens > /dev/null; then
   screens=$(screens)
   if [[ -n "$screens" ]]; then
     echo "Open screen sessions: $(echo "$screens" | wc -w)"
-    echo " " $screens # intentionally unquoted to put everything on one line
+    echo "  $(echo "$screens" | tr '\n' ' ')"
   fi
   unset screens
 fi

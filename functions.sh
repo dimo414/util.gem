@@ -83,6 +83,8 @@ goto() {
       | fzf --tiebreak=end --select-1 --exit-0 --read0 "${fzf_flags[@]}" \
         --query="$*"
   ) || return
+  # https://github.com/koalaman/shellcheck/issues/613
+  # shellcheck disable=SC2164
   cd "$path"
 }
 
@@ -173,18 +175,17 @@ psgrep() {
 
 # Send an email when the process passed as an argument terminates
 emailme() {
-  if [[ -z "$1" ]]
-  then
-    echo "Usage: emailme cmd cmdargs..."
-    echo "Usage: EMAIL=user@example.com emailme cmd cmdargs..."
+  local usage=(
+    'emailme cmd cmdargs...'
+    'EMAIL=user@example.com emailme cmd cmdargs...')
+  if [[ -z "$1" ]]; then
+    printf 'Usage: %s\n' "${usage[@]}" >&2
     return 0
   fi
 
-  if [[ -z "$EMAIL" ]]
-  then
+  if [[ -z "$EMAIL" ]]; then
     echo 'No EMAIL value found' >&2
-    # shellcheck disable=SC2119
-    emailme >&2 # usage
+    printf 'Usage: %s\n' "${usage[@]}" >&2
     return 1
   fi
 
@@ -244,10 +245,10 @@ backoff() {
 
   local output delay="$min"
   output=$(mktemp --suffix=.txt) || return
-  trap "rm -f '$output'" RETURN
   while true; do
     if "$@" > "$output"; then
       cat "$output"
+      rm -f "$output"
       return
     fi
     sleep "${delay}s"
@@ -333,9 +334,9 @@ gitsquash() {
 java_demo() {
   local dir="${TMP:-/tmp}"
   local class="Demo$$"
-  local path="$dir/$class.java"
+  local path="${dir}/${class}.java"
   if ! [[ -f "$path" ]] ; then
-    cat << EOF > $path
+    cat << EOF > "$path"
 import java.util.*;
 
 public class $class {
@@ -347,8 +348,8 @@ EOF
   fi
   # cd to /tmp to support Cygwin - Java doesn't like absolute Cygwin paths
   (cd "$dir" &&
-   vi $class.java &&
-   echo "javac $path" >&2 && javac "$class.java" &&
+   vi ${class}.java &&
+   echo "javac $path" >&2 && javac "${class}.java" &&
    echo "java -cp $dir $class" >&2   && java -cp . "$class"
   )
 }
