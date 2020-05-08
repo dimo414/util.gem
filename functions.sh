@@ -251,7 +251,7 @@ backoff() {
       rm -f "$output"
       return
     fi
-    sleep "${delay}s"
+    sleep "${delay}s" || return
     # increase delay by 1-10x
     delay=$(( delay * (RANDOM % 10 + 1) ))
     # cap delay at max, including overflows
