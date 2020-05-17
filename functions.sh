@@ -119,7 +119,8 @@ _screen_logging() {
   shift
   # http://serverfault.com/a/248387
   # https://stackoverflow.com/a/50651839
-  screen -S "$session" -L -Logfile "$logfile" "$@"
+  # https://unix.stackexchange.com/q/373115
+  screen -S "$session" -h 10000 -L -Logfile "$logfile" "$@"
   echo "Logfile at $logfile"
 }
 
@@ -133,6 +134,11 @@ screenopen() {
 # Creates a screen session (if it doesn't already exist), and then writes all
 # arguments to the screen's command buffer. To execute the commands, append
 # with `\n`. To execute and exit upon success append with `&& exit\n`.
+#
+# Note that arguments are written to the command-buffer as-is, so special
+# characters (shell syntax like &&, as well as whitespace) is not escaped.
+# To escape variables use ${...@Q} expansion, which will write the contents
+# to the buffer properly escaped.
 screencmd() {
   local session="${1:?Must specify a screen session name.}"
   shift
