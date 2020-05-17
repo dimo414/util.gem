@@ -7,10 +7,11 @@
 #
 
 if command -v screens > /dev/null; then
-  screens=$(screens)
-  if [[ -n "$screens" ]]; then
-    echo "Open screen sessions: $(echo "$screens" | wc -w)"
-    echo "  $(echo "$screens" | tr '\n' ' ')"
-  fi
-  unset screens
+  (
+    screens=$(screens)
+    if [[ -n "$screens" ]]; then
+      echo "Open screen sessions: $(wc -w <<<"$screens")"
+      echo "  $(tr '\n' ' ' <<<"$screens")"
+    fi
+  )
 fi
