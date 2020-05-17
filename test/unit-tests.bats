@@ -27,6 +27,9 @@ expect_eq() {
   }
 
   expect_eq "$(: | foo)" "stdin"
+  expect_eq "$(foo | cat)" "nostdin"
+  expect_eq "$(foo < /dev/null)" "stdin"
+  expect_eq "$(foo > /dev/stdout)" "nostdin"
   expect_eq "$(foo)" "nostdin"
 
   expect_eq "$(: | foo bar)" "stdin bar"

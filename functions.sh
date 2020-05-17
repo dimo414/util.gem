@@ -35,7 +35,7 @@ if_stdin() {
   if (( $# )); then
     args=$(printf '%q ' "$@")
   fi
-  if [[ -p /dev/stdin ]]; then
+  if ! [[ -t 0 ]]; then # maybe `|| [[ -p /dev/stdin ]]` ?
     eval "$has_stdin $args"
   else
     eval "$no_stdin $args"
