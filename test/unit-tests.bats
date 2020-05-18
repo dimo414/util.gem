@@ -81,6 +81,22 @@ expect_eq() {
   (( $status == 15 ))
 }
 
+@test "highlight" {
+  highlight_msg() {
+    printf '%s\n' 'a lot to read' 'and lots of |text|' 'but nothing to match?' \
+    | highlight "$@"
+  }
+
+  # Use "${output//$'\e'/\\e}" to see the escaped text
+  run highlight_msg read
+  expect_eq "${output}" $'a lot to \e[31mread\e[0m\nand lots of |text|\nbut nothing to match?'
+  run highlight_msg unmatched 'a lot' 'of |text' thin 'to.*ma.*$'
+  expect_eq "${output}" \
+    $'\e[32ma lot\e[0m to read\nand lots \e[33mof |text\e[0m|\nbut no\e[34mthin\e[0mg \e[35mto match?\e[0m'
+  run highlight_msg aaa bbb ccc ddd eee fff ggg read # wraps around
+  expect_eq "${output}" $'a lot to \e[32mread\e[0m\nand lots of |text|\nbut nothing to match?'
+}
+
 @test "emailme" {
   local tmp=$(mktemp)
   sendmail() { cat - > "$tmp"; }
