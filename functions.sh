@@ -300,7 +300,16 @@ wait_port() {
 # This function will pass additional arguments to Bash, e.g. `-c 'foo'` will
 # invoke foo in a pristine shell non-interactively.
 pristine_bash() {
-  env -i bash --noprofile --norc "$@"
+  # Persist a few core environment variables, if they're set
+  local env_vars=(
+    ${DISPLAY:+"DISPLAY=${DISPLAY}"}
+    ${HOME:+"HOME=${HOME}"}
+    ${LANG:+"LANG=${LANG}"}
+    ${PATH:+"PATH=${PATH}"}
+    ${TERM:+"TERM=${TERM}"}
+    ${USER:+"USER=${USER}"}
+  )
+  env -i "${env_vars[@]}" bash --noprofile --norc "$@"
 }
 
 #
