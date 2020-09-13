@@ -3,16 +3,16 @@
 *See the [ProfileGem](https://github.com/dimo414/ProfileGem) project for
 installation instructions.*
 
-This gem contains several functions and aliases considered (by the author) to
-be generally useful. By design the functionality in this gem are **entirely
+This gem contains several functions and aliases considered (by the author) to be
+generally useful. By design the functionality in this gem are **entirely
 additive**, meaning nothing in your current environment should be changed by
-including these utilities. For most users there's no harm in including this
-gem even if you don't intend to use any of its features.
+including these utilities. For most users there's no harm in including this gem
+even if you don't intend to use any of its features.
 
 Note: while most vanilla shell environments will not conflict with the names
-used by this gem, it's impossible to guarantee the names chosen won't
-conflict with some other application or utility. If a name used here
-collides with a common utility please file a bug.
+used by this gem, it's impossible to guarantee the names chosen won't conflict
+with some other application or utility. If a name used here collides with a
+common utility please file a bug.
 
 ## Key Features
 
@@ -39,11 +39,11 @@ list of functionality provided.*
     command, currently supported on Linux and Cygwin.
 
 *   `dirsize` and `diskspace` - the former takes a directory as an argument and
-     prints its size, the latter prints the available and total disk space.
-     Both use a human-readable format.
+    prints its size, the latter prints the available and total disk space. Both
+    use a human-readable format.
 
-*    `sortc` sorts and counts the unique lines piped to stdin, and orders them
-     from most to least common.
+*   `sortc` sorts and counts the unique lines piped to stdin, and orders them
+    from most to least common.
 
 ### Functions
 
@@ -69,8 +69,8 @@ list of functionality provided.*
 
 *   `backoff` basic implementation of exponential backoff for shell commands.
 
-*   `wait_ext` blocks until the PIDs passed as arguments are finished.
-    Useful for waiting for commands running in other terminals.
+*   `wait_ext` blocks until the PIDs passed as arguments are finished. Useful
+    for waiting for commands running in other terminals.
 
     `$ long_running_command & wait # prints the PID`
 
@@ -90,15 +90,14 @@ list of functionality provided.*
 
 Copyright 2016-2017 Michael Diamond
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <http://www.gnu.org/licenses/>.
