@@ -76,7 +76,7 @@ goto() {
 
   local path
   path=$(
-    { (( ${#GOTO_PATHS[@]} > 0 )) && find "${GOTO_PATHS[@]}" \
+    { (( ${#GOTO_PATHS[@]} > 0 )) && find -L "${GOTO_PATHS[@]}" \
         -mindepth 1 -maxdepth 1 -not -path '*/\.*' -type d -print0
       (( ${#GOTO_DIRS[@]} > 0 )) && printf '%s\0' "${GOTO_DIRS[@]}"
     } | sort -z \
