@@ -280,9 +280,8 @@ wait_ext() {
 }
 
 # Returns a non-zero exit code if the provided port is not in use
-# http://unix.stackexchange.com/q/5277
 listening() {
-  nc -q 0 localhost "$1" < /dev/null
+  nc -z localhost "$1"
 }
 
 # Busy-waits until the specified ports are accepting requests
