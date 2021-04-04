@@ -265,6 +265,12 @@ backoff() {
   done
 }
 
+# List all actively listening ports
+# http://snipplr.com/view/12693/
+ports() {
+  sudo netstat -ltnp
+}
+
 # Waits for processes that aren't a child process of this shell
 # Pair with:
 #   long_running_command & wait # this prints the PID of long_running_command
@@ -281,7 +287,7 @@ wait_ext() {
 
 # Returns a non-zero exit code if the provided port is not in use
 listening() {
-  nc -z localhost "$1"
+  nc -z -w 5 localhost "$1"
 }
 
 # Busy-waits until the specified ports are accepting requests

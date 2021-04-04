@@ -6,3 +6,4 @@
 
 # External commands
 pg::require fzf "Installation instructions: https://github.com/junegunn/fzf"
+pg::require netstat "Run 'sudo apt-get install net-tools' to install netstat"
