@@ -317,6 +317,14 @@ pristine_bash() {
   env -i "${env_vars[@]}" bash --noprofile --norc "$@"
 }
 
+# Create a new temp directory and cd into it.
+# Any arguments are included in the directory name.
+# Inspired by https://frantic.im/cdtmp/
+cdtmp() {
+  local IFS=- parts=("$@" cdtmp)
+  cd "$(mktemp -d "${TMPDIR:-/tmp}/${parts[*]}-XXXXXX")"
+}
+
 #
 # Git Functions
 #

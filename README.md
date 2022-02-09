@@ -58,6 +58,8 @@ list of functionality provided.*
 *   `highlight` highlights matched keywords in input passed to stdin, e.g.
     `noisy_command | highlight ERROR`
 
+*   `cdtmp` creates a new directory under `/tmp` and `cd`s to it.
+
 *   `screens` prints a list of currently open `screen` sessions, and
     `screenopen` opens an existing screen session (or creates a new one) in a
     user-friendly way. Power-users will prefer sticking with `screen` or their
