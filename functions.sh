@@ -50,7 +50,7 @@ if_stdin() {
 # if it's on the PATH.
 quiet_success() {
   local output
-  output=$( eval "$@" 2>&1 )
+  output=$( eval "$*" 2>&1 )
   local ret=$?
   if (( ret != 0 )); then
     echo "$output"
@@ -162,7 +162,7 @@ fi # if screen is installed
 # TODO how is this better than pgrep?
 # https://github.com/koalaman/shellcheck/wiki/SC2009
 psgrep() {
-  local psargs grepargs
+  local psargs greparg
   if [[ -z "$2" ]]
   then
     psargs="aux"
@@ -321,8 +321,11 @@ pristine_bash() {
 # Any arguments are included in the directory name.
 # Inspired by https://frantic.im/cdtmp/
 cdtmp() {
-  local IFS=- parts=("$@" cdtmp)
-  cd "$(mktemp -d "${TMPDIR:-/tmp}/${parts[*]}-XXXXXX")"
+  local IFS=- parts=("$@" cdtmp) path
+  path=$(mktemp -d "${TMPDIR:-/tmp}/${parts[*]}-XXXXXX") || return
+  # https://github.com/koalaman/shellcheck/issues/613
+  # shellcheck disable=SC2164
+  cd "$path"
 }
 
 #
