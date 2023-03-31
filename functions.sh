@@ -58,6 +58,16 @@ quiet_success() {
   fi
 }
 
+# Prints the contents of stdin as hex for easy review of unprintable characters.
+# See also https://unix.stackexchange.com/q/562347/19157 and `man od`
+hex() {
+  # -v:   print duplicate lines (e.g. lines of all zeros aren't collapsed)
+  # -Ax:  byte offsets in hex instead of octal
+  # -tc:  print each character/byte literally or escaped
+  # -tx1: print each character as hex
+  od -v -Ax -tc -tx1
+}
+
 # Uses https://github.com/junegunn/fzf "fuzzy find" to support easily cd-ing
 # to commonly used directories. Add paths to GOTO_PATHS or GOTO_DIRS to
 # include them in the search.
