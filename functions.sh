@@ -338,6 +338,14 @@ cdtmp() {
   cd "$path"
 }
 
+# Reads stdin into a URL to display the contents via https://topaz.github.io/paste
+# Data is stored in the URL and therefore is not at risk of being lost or leaked.
+# See also https://github.com/topaz/paste
+pastebin() {
+  printf 'https://topaz.github.io/paste/#'
+  lzma -c | base64
+}
+
 #
 # Git Functions
 #
