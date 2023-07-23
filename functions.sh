@@ -343,7 +343,8 @@ cdtmp() {
 # See also https://github.com/topaz/paste
 pastebin() {
   printf 'https://topaz.github.io/paste/#'
-  lzma -c | base64
+  lzma -c | base64 -w0
+  echo
 }
 
 #
